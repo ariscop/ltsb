@@ -11,7 +11,9 @@ call :removeOneDrive
 call :scDiagTrack
 call :scdmwappushservice
 call :applyPolicies
+call :fixPhotoViewer
 call :killUpdates
+
 pause
 
 goto :end
@@ -131,6 +133,16 @@ reg unload HKLM\_ltsb
 rem Disable the service.
 reg load HKLM\_ltsb %MOUNTDIR%\Windows\System32\config\SYSTEM
 reg add HKLM\_ltsb\ControlSet001\Services\wuauserv /v Start /t REG_DWORD /d 4 /f
+reg unload HKLM\_ltsb
+
+goto :eof
+ENDLOCAL
+
+:fixPhotoViewer
+SETLOCAL
+
+reg load HKLM\_ltsb %MOUNTDIR%\Windows\System32\config\SOFTWARE
+reg import "%~dp0photoviewer.reg"
 reg unload HKLM\_ltsb
 
 goto :eof
